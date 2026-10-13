@@ -1,5 +1,6 @@
 import os
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware 
 from pydantic import BaseModel
 from google import genai
 import chromadb
@@ -7,6 +8,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 app = FastAPI()
+
+# Add CORS middleware to accept local frontend development traffic
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins to securely test locally
+    allow_credentials=True,
+    allow_methods=["*"],  # Opens up POST and GET request pathways
+    allow_headers=["*"],
+)
 
 # 1. Initialize Google Gemini Client
 gemini_key = os.getenv("GEMINI_API_KEY")
