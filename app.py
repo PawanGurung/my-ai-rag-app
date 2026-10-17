@@ -26,8 +26,10 @@ if user_prompt := st.chat_input("Type your question here..."):
 
     # 5. Connect directly to your live production Render server URL path!
     # Update this URL with your exact live Render endpoint string
-    render_url = "https://onrender.com"
-    payload = {"message": user_prompt}
+    # render_url = "https://onrender.com"
+    # render_url = "http://localhost:8000/api/v1/chat"
+    render_url = "https://my-ai-rag-app.onrender.com/api/v1/chat"
+    payload = {"message": user_prompt} 
     
     # Spawn an assistant bubble with a loading spinner while fetching the backend response
     with st.chat_message("assistant"):

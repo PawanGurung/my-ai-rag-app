@@ -55,6 +55,7 @@ class ChatRequest(BaseModel):
     message: str
 
 @app.post("/api/v1/chat")
+# @app.post("chat_with_ai")
 async def chat_with_ai(request: ChatRequest):
     try:
         # Step A: Query ChromaDB for the closest matching reference text fragment
@@ -79,7 +80,7 @@ async def chat_with_ai(request: ChatRequest):
         
         # Step C: Route the augmented prompt package to Google Gemini
         response = client.models.generate_content(
-            model="models/gemini-3.8-flash",
+            model="models/gemini-2.5-flash",
             contents=augmented_prompt,
         )
         return {
@@ -88,4 +89,5 @@ async def chat_with_ai(request: ChatRequest):
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # raise HTTPException(status_code=500, detail=str(e))
+         raise e
