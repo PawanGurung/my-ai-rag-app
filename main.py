@@ -59,10 +59,32 @@ class ChatRequest(BaseModel):
 async def chat_with_ai(request: ChatRequest):
     try:
         # Step A: Query ChromaDB for the closest matching reference text fragment
-        db_results = collection.query(
-            query_texts=[request.message],
-            n_results=1  # Bring back only the single best matching sentence
-        )
+        # db_results = collection.query(
+        #     query_texts=[request.message],
+        #     n_results=1  # Bring back only the single best matching sentence
+        # )
+
+        # Check how many chunks are stored
+        total_chunks = collection.count()
+
+        if total_chunks == 0:
+            retrieved_context = ["No context found."]
+        else:
+            # Retrieve all chunks, ranked by similarity
+            db_results = collection.query(
+                query_texts=[request.message],
+                n_results=total_chunks,
+                include=["documents", "distances"]
+            )
+
+            retrieved_documents = db_results["documents"][0]
+            distances = db_results["distances"][0]
+
+            # Print every match and its distance in the Render logs
+            for document, distance in zip(retrieved_documents, distances):
+                print(f"Distance: {distance:.4f} | Document: {document}")
+
+            retrieved_context = retrieved_documents
         
         # Extract the matched text chunk from the database output array
         retrieved_context = db_results['documents'][0] if db_results['documents'] else ["No context found."]
