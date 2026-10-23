@@ -102,7 +102,7 @@ async def chat_with_ai(request: ChatRequest):
         
         # Step C: Route the augmented prompt package to Google Gemini
         response = client.models.generate_content(
-            model="models/gemini-3.8-flash",
+            model="models/gemini-3.5-flash-lite",
             contents=augmented_prompt,
         )
         return {
