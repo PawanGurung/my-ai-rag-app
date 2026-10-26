@@ -42,6 +42,7 @@ if user_prompt := st.chat_input("Type your question here..."):
                     source = data.get("source_used", "No source found.")
                     
                     # Display the AI's answer text bubble
+          
                     st.markdown(ai_reply)
                     
                     # Render a clean expander drop-down to show the database verification source row
@@ -50,6 +51,16 @@ if user_prompt := st.chat_input("Type your question here..."):
                         
                     st.session_state.messages.append({"role": "assistant", "content": ai_reply})
                 else:
-                    st.error(f"Backend Server Error: Received Code {response.status_code}")
-            except Exception as e:
-                st.error(f"Connection Failure: Could not reach Render server. Details: {str(e)}")
+                    st.error(
+                        f"Backend returned HTTP {response.status_code}"
+                    )
+                    st.caption(response.text[:500])
+
+            except requests.exceptions.Timeout:
+                st.error("The backend took too long to respond.")
+
+            except requests.exceptions.ConnectionError:
+                st.error("Could not connect to the backend.")
+
+            except requests.exceptions.RequestException as e:
+                st.error(f"HTTP request failed: {e}")
