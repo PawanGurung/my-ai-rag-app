@@ -28,8 +28,8 @@ function App() {
 
     try {
       const response = await fetch(
-        // 'https://my-ai-rag-app.onrender.com/api/v1/chat',
-        'http://127.0.0.1:8000/api/v1/chat',
+        'https://my-ai-rag-app.onrender.com/api/v1/chat',
+        // 'http://127.0.0.1:8000/api/v1/chat',
         {
           method: 'POST',
           headers: {
